@@ -219,7 +219,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  AppSqitch = buildPerlModule {
+  AppSqitch = buildPerlPackage {
     name = "App-Sqitch-0.999";
     src = fetchurl {
       url = mirror://cpan/authors/id/D/DW/DWHEELER/App-Sqitch-0.999.tar.gz;
@@ -239,13 +239,17 @@ let self = _self // overrides; _self = with self; {
       Throwable TryTiny TypeTiny URI
       URIdb  libintlperl namespaceautoclean
     ];
-    doCheck = false;  # Uses home directory in tests
+    configurePhase = "perl Build.PL --prefix $out" ;
+    buildPhase = "./Build" ;
+    installPhase = "mkdir -p $out ; ./Build install" ;
+    checkPhase = "./Build test" ;
+    doCheck = false ;  # Tests require (non-pure) $HOME, and so fail.
     meta = {
-      homepage = http://sqitch.org/;
-      description = "Sane database change management";
-      license = "mit";
-    };
-  };
+      homepage = http://sqitch.org/ ;
+      description = "Sane database change management" ;
+      license = stdenv.lib.licenses.mit ;
+    } ;
+  } ;
 
   ArrayCompare = buildPerlPackage {
     name = "Array-Compare-1.18";
