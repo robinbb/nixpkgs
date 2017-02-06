@@ -29,7 +29,9 @@ stdenv.mkDerivation rec {
     install -m 444 -D ${zshCompletion} $out/share/zsh/site-functions/_tarsnap
   '';
 
-  buildInputs = [ openssl zlib e2fsprogs ];
+  buildInputs =
+    (if stdenv.isLinux then [ e2fsprogs ] else [])
+    ++ [ openssl zlib ];
 
   meta = {
     description = "Online backups for the truly paranoid";
